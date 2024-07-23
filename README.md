@@ -99,3 +99,58 @@ dir=/work2/CohesinProject/GSE178982_Hsieh_NatGenet2022/ChIP-seq/parse2wigdir+
 
 #outputs in drompa3 directory
 
+# Peak comparison with compare_bs, grouping remaining peaks after the depletion
+
+#!/bin/bash
+
+sing="singularity exec --bind /work,/work2,/work3 /work3/SingularityImages/churros.0.13.2.sif"
+
+mkdir -p peakcomparison
+
+ conditions=("delta_CTCF" "delta_WAPL" "delta_RAD21")
+ marks=("CTCF" "SMC1A" "SMC3" "RAD21")
+
+#Cicle for 
+
+       for condition in "${conditions[@]}"; do
+                  for mark in "${marks[@]}"; do
+                                    
+        $sing compare_bs -and -1 peak/progmouse_chipseq_${mark}_${condition}_UT.${condition}_UT_${mark}.peak.bed \
+                 -2 peak/progmouse_chipseq_${mark}_${condition}_IAA.${condition}_IAA_${mark}.peak.bed \
+                  > peakcomparison/comparison_progmmousechipseq_${condition}_${mark}.bed
+                  done         
+                  done
+                  
+#adding command -and i needed to output peaks of sample 1 that overlap to peaks of sample 2, so this is how peaks that remains after depletion can be grouped
+
+# visualize results (exemple)
+    $ parsecomparebs.pl peak/comparison_progmmousechipseq_delta_CTCF_CTCF.bed
+
+#this command outputs the statistics in a single line speced by tabs
+
+# Grouping peaks: new and lost after deplation with compare_bs
+
+#!/bin/bash
+
+sing="singularity exec --bind /work,/work2,/work3 /work3/SingularityImages/churros.0.13.2.sif"
+
+#creates the output drectory
+
+mkdir -p peakcomparisonlost
+
+conditions=("delta_CTCF" "delta_WAPL" "delta_RAD21")
+
+marks=("CTCF" "SMC1A" "SMC3" "RAD21")
+
+    # Cicle for 
+     for condition in "${conditions[@]}"; do
+                  for mark in "${marks[@]}"; do
+                                
+        $sing compare_bs -1 peak/progmouse_chipseq_${mark}_${condition}_UT.${condition}_UT_${mark}.peak.bed \
+                 -2 peak/progmouse_chipseq_${mark}_${condition}_IAA.${condition}_IAA_${mark}.peak.bed \
+                  > peakcomparisonlost/comparison_progmmousechipseq_${condition}_${mark}.bed
+                  done         
+                  done
+
+#compare_bs outputs the peaks that are in sample 1 but not in sample 2, if sample 1 is UT(untreated) and sample 2 is Delta(depletion) sample the output is group of lost peaks. To group new peaks is sufficent to exchange the order of the samples and create a new directory           
+
