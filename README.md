@@ -70,3 +70,32 @@ sing="singularity exec --bind /work,/work2,/work3 /work3/SingularityImages/churr
             $sing drompa+ PC_SHARP -g $gene $s -o peak/progmouse_chipseq_${condition}_${mark} --gt $gt --callpeak
                          done
                          done
+
+# Commmand to output Graphic Peak comparison between delta and ut sample using drompa+ (PFD file) exemple:
+
+
+#!/bin/bash
+
+ mkdir -p drompa3
+
+DBdir=/work/Database/UCSC/mm39
+
+gene=$DBdir/refFlat.NM.uniqTSS.txt
+
+sing="singularity exec --bind /work,/work2,/work3 /work3/SingularityImages/churros.0.13.2.sif"
+
+gt=/work/Database/UCSC/mm39/genome_table
+
+
+dir=/work2/CohesinProject/GSE178982_Hsieh_NatGenet2022/ChIP-seq/parse2wigdir+
+
+        $sing drompa+ PC_SHARP -g $gene -i $dir/delta_CTCF_IAA_CTCFChIP.100.bw,$dir/delta_CTCF_IAA_CTCFinput.100.bw,deltaCTCF_CTCF \
+         -i $dir/delta_CTCF_UT_CTCFChIP.100.bw,$dir/delta_CTCF_UT_CTCFinput.100.bw,utCTCF_CTCF -o drompa3 --gt $gt 
+       --showitag 2 
+       --ls 5000   
+#ls 5000 = changes bin size to 5kbp to show broad peaks
+
+#shows the input lines reads
+
+#outputs in drompa3 directory
+
