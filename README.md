@@ -73,6 +73,7 @@ ls 5000 = changes bin size to 5kbp to show broad peaks
 
 
 ### Peak comparison with compare_bs, grouping remaining peaks after the depletion
+to use compare_bs please refer to https://github.com/rnakato/ChIPseqTools
 
      #!/bin/bash
      sing="singularity exec --bind /work,/work2,/work3 /work3/SingularityImages/churros.0.13.2.sif"
@@ -119,8 +120,10 @@ this command outputs the statistics in a single line speced by tabs
 compare_bs outputs the peaks that are in sample 1 but not in sample 2, if sample 1 is UT(untreated) and sample 2 is Delta(depletion) sample the output is group of lost peaks. To group new peaks is sufficent to exchange the order of the samples and create a new directory.           
 
 ### Peak Annotation 
-Peak distribution using compare_bed2tss     #!/bin/bash
+Peak distribution using compare_bed2tss     
+to use compare_bs please refer to https://github.com/rnakato/ChIPseqTools
 
+     #!/bin/bash
      build=mm39
      Ddir=/work3/Database/Database_fromDocker/Referencedata_$build
      gt=$Ddir/genometable.txt
